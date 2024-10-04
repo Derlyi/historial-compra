@@ -1,4 +1,4 @@
-# views.py
+from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -42,5 +42,9 @@ def generate_invoice_pdf(request, order_id):
 
 @login_required
 def order_history(request):
-    orders = Order.objects.filter(user=request.user).order_by('-created')
+    orders = Order.objects.filter(user=request.user)
     return render(request, 'orders/order_history.html', {'orders': orders})
+
+def order_detail(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    return render(request, 'orders/order_detail.html', {'order': order})
